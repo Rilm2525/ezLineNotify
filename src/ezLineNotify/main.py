@@ -13,9 +13,11 @@ class ImageURLs:
 class Image:
     def __init__(self, file_path: str, mode: Literal["r"] = "r") -> None:
         self.__file_stream = BytesIO()
-        with PILImage.open(file_path, mode=mode) as pil_img:
-            pil_img.save(self.__file_stream, format="JPEG")
-            self.__file_stream.seek(0)
+        pil_img = PILImage.open(file_path, mode=mode)
+        if pil_img.mode != "RGB":
+            pil_img = pil_img.convert("RGB")
+        pil_img.save(self.__file_stream, format="JPEG")
+        self.__file_stream.seek(0)
 
     def get_file_stream(self) -> BytesIO:
         return self.__file_stream
