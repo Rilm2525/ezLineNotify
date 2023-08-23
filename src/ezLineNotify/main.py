@@ -17,6 +17,7 @@ class Image:
         if pil_img.mode != "RGB":
             pil_img = pil_img.convert("RGB")
         pil_img.save(self.__file_stream, format="JPEG")
+        pil_img.close()
         self.__file_stream.seek(0)
 
     def get_file_stream(self) -> BytesIO:
