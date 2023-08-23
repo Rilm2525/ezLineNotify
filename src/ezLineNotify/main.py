@@ -17,20 +17,16 @@ class ImageURLs:
         return self.__thumbnail_url, self.__fullsize_url
 
 class Image:
-    def __init__(self, source: Union[str, PILImage.Image]) -> None:
+    def __init__(self, source: Union[str, BytesIO]) -> None:
         self.__file_stream = BytesIO()
-        if type(source) == str:
+        if type(source) == str or type(source) == BytesIO:
             pil_img = PILImage.open(source, mode="r")
             if not pil_img.mode == "RGB":
                 pil_img = pil_img.convert("RGB")
             pil_img.save(self.__file_stream, format="JPEG")
             pil_img.close()
-        elif type(source) == PILImage.Image:
-            if not source.mode == "RGB":
-                pil_img = source.convert("RGB")
-            pil_img.save(self.__file_stream, format="JPEG")
         else:
-            raise UnknownSourceType("Pillowがサポートしている画像ファイルへのパスかPillowのImageクラスのインスタンスをsourceに指定してください")
+            raise UnknownSourceType("Pillowがサポートしている画像ファイルへのパスかBytesIOオブジェクトをsourceに指定してください")
         self.__file_stream.seek(0)
 
     def get_file_stream(self) -> BytesIO:

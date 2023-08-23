@@ -3,8 +3,8 @@ from .main import (
     Image,
     Sticker,
     LineNotify,
+    UnknownSourceType,
     UnknownImageType,
-    UnknownSourceType
 )
 
-__version__ = "0.0.0.3"
+__version__ = "0.0.0.4"
