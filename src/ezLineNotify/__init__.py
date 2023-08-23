@@ -3,7 +3,6 @@ from .main import (
     Image,
     Sticker,
     LineNotify,
-    UnknownSourceType,
     UnknownImageType,
 )
 

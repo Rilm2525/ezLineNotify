@@ -1,10 +1,8 @@
 import requests
-from io import BytesIO
+from io import BytesIO, BufferedReader
 from PIL import Image as PILImage
 from typing import Union
-
-class UnknownSourceType(Exception):
-    pass
+from os import PathLike
 
 class UnknownImageType(Exception):
     pass
@@ -17,16 +15,13 @@ class ImageURLs:
         return self.__thumbnail_url, self.__fullsize_url
 
 class Image:
-    def __init__(self, source: Union[str, BytesIO]) -> None:
+    def __init__(self, source: PathLike) -> None:
         self.__file_stream = BytesIO()
-        if type(source) == str or type(source) == BytesIO:
-            pil_img = PILImage.open(source, mode="r")
-            if not pil_img.mode == "RGB":
-                pil_img = pil_img.convert("RGB")
-            pil_img.save(self.__file_stream, format="JPEG")
-            pil_img.close()
-        else:
-            raise UnknownSourceType("Pillowがサポートしている画像ファイルへのパスかBytesIOオブジェクトをsourceに指定してください")
+        pil_img = PILImage.open(source, mode="r")
+        if not pil_img.mode == "RGB":
+            pil_img = pil_img.convert("RGB")
+        pil_img.save(self.__file_stream, format="JPEG")
+        pil_img.close()
         self.__file_stream.seek(0)
 
     def get_file_stream(self) -> BytesIO:
