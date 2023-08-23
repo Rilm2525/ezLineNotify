@@ -1,7 +1,13 @@
 import requests
 from io import BytesIO
 from PIL import Image as PILImage
-from typing import Literal, Union
+from typing import Union
+
+class UnknownSourceType(Exception):
+    pass
+
+class UnknownImageType(Exception):
+    pass
 
 class ImageURLs:
     def __init__(self, thumbnail_url: str, fullsize_url: str) -> None:
@@ -11,13 +17,20 @@ class ImageURLs:
         return self.__thumbnail_url, self.__fullsize_url
 
 class Image:
-    def __init__(self, file_path: str, mode: Literal["r"] = "r") -> None:
+    def __init__(self, source: Union[str, PILImage.Image]) -> None:
         self.__file_stream = BytesIO()
-        pil_img = PILImage.open(file_path, mode=mode)
-        if pil_img.mode != "RGB":
-            pil_img = pil_img.convert("RGB")
-        pil_img.save(self.__file_stream, format="JPEG")
-        pil_img.close()
+        if type(source) == str:
+            pil_img = PILImage.open(source, mode="r")
+            if not pil_img.mode == "RGB":
+                pil_img = pil_img.convert("RGB")
+            pil_img.save(self.__file_stream, format="JPEG")
+            pil_img.close()
+        elif type(source) == PILImage.Image:
+            if not source.mode == "RGB":
+                pil_img = source.convert("RGB")
+            pil_img.save(self.__file_stream, format="JPEG")
+        else:
+            raise UnknownSourceType("Pillowがサポートしている画像ファイルへのパスかPillowのImageクラスのインスタンスをsourceに指定してください")
         self.__file_stream.seek(0)
 
     def get_file_stream(self) -> BytesIO:
@@ -51,7 +64,7 @@ class LineNotify:
             elif type(image) == Image:
                 files = {"imageFile": image.get_file_stream()}
             else:
-                raise
+                raise UnknownImageType("ImageURLsかImageのインスタンス以外がimageに指定されました")
 
         if sticker:
             data["stickerPackageId"], data["stickerId"] = sticker.get_info()
