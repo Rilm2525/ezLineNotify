@@ -19,7 +19,7 @@ line = LineNotify("LineNotifyのトークン")
 line.send("Pythonからのメッセージ")
 
 #写真の送信(URLから)
-line.send("テキスト以外を送信する場合でもテキストは必須です", image=ImageURLs("サムネイルファイルのURL". "タップしたときに表示されるオリジナルファイルのURL"))
+line.send("テキスト以外を送信する場合でもテキストは必須です", image=ImageURLs("サムネイルファイルのURL", "タップしたときに表示されるオリジナルファイルのURL"))
 
 #写真の送信(ファイルから)
 line.send("テキスト以外を送信する場合でもテキストは必須です", image=Image("画像ファイルのパス"))
