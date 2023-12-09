@@ -1,5 +1,5 @@
 import requests
-from io import BytesIO, BufferedReader
+from io import BytesIO
 from PIL import Image as PILImage
 from typing import Union
 from os import PathLike

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ezLineNotify",
-    version="0.0.0.4",
+    version="0.0.0.5",
     license="MIT",
     description="Use LINE Notify from Python.",
     
